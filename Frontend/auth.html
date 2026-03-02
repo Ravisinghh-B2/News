@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NewsHub - Authentication</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Content Security Policy (CSP) for Development -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self';
+        script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com;
+        style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
+        font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+        img-src 'self' data: https: http: *;
+        connect-src 'self' http://localhost:5000 http://127.0.0.1:5000 ws://localhost:5500 ws://127.0.0.1:5500 http://127.0.0.1:5500;
+        object-src 'none';
+        base-uri 'self';
+        form-action 'self';
+        frame-ancestors 'none';
+    ">
+</head>
+
+<body class="auth-body">
+    <button id="back-btn" class="back-btn" aria-label="Go back to previous page">
+        <i class="fas fa-arrow-left"></i>
+        <span>Back</span>
+    </button>
+    <div class="auth-wrapper">
+        <div class="auth-container">
+            <!-- Left: Signup Section -->
+            <div class="auth-panel signup-panel">
+                <div class="panel-content">
+                    <div class="logo">
+                        <a href="/" data-link><i class="fas fa-newspaper"></i> NewsHub</a>
+                    </div>
+                    <h2>Create an Account</h2>
+                    <p>Join the community and stay informed with personalized updates.</p>
+                    <form id="signup-form" aria-label="Signup Form">
+                        <div class="input-group">
+                            <label for="signup-name"><i class="fas fa-user"></i> Full Name</label>
+                            <input type="text" id="signup-name" placeholder="John Doe" required aria-required="true">
+                        </div>
+                        <div class="input-group">
+                            <label for="signup-username"><i class="fas fa-id-badge"></i> Username</label>
+                            <input type="text" id="signup-username" placeholder="johndoe123" required
+                                aria-required="true">
+                        </div>
+                        <div class="input-group">
+                            <label for="signup-email"><i class="fas fa-envelope"></i> Email Address</label>
+                            <input type="email" id="signup-email" placeholder="john@example.com" required
+                                aria-required="true">
+                        </div>
+                        <div class="input-group password-group">
+                            <label for="signup-password"><i class="fas fa-lock"></i> Password</label>
+                            <div class="input-with-icon">
+                                <input type="password" id="signup-password" placeholder="••••••••" required
+                                    aria-required="true">
+                                <i class="fas fa-eye toggle-password" data-target="signup-password" role="button"
+                                    aria-label="Toggle password visibility"></i>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="signup-confirm"><i class="fas fa-shield-alt"></i> Confirm Password</label>
+                            <input type="password" id="signup-confirm" placeholder="••••••••" required
+                                aria-required="true">
+                        </div>
+                        <button type="submit" class="btn primary-btn auth-btn">Create Free Account</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Right: Login Section -->
+            <div class="auth-panel login-panel">
+                <div class="panel-content">
+                    <h2>Welcome Back!</h2>
+                    <p>Enter your credentials to access your personalized feed.</p>
+                    <form id="login-form" aria-label="Login Form">
+                        <div class="input-group">
+                            <label for="login-email"><i class="fas fa-envelope"></i> Email</label>
+                            <input type="email" id="login-email" placeholder="john@example.com" required
+                                aria-required="true">
+                        </div>
+                        <div class="input-group password-group">
+                            <div class="label-row">
+                                <label for="login-password"><i class="fas fa-lock"></i> Password</label>
+                                <a href="#" class="forgot-link">Forgot Password?</a>
+                            </div>
+                            <div class="input-with-icon">
+                                <input type="password" id="login-password" placeholder="••••••••" required
+                                    aria-required="true">
+                                <i class="fas fa-eye toggle-password" data-target="login-password" role="button"
+                                    aria-label="Toggle password visibility"></i>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn primary-btn auth-btn">Login to NewsHub</button>
+                    </form>
+
+                    <div class="auth-divider">
+                        <span>OR</span>
+                    </div>
+
+                    <div class="oauth-buttons">
+                        <button class="btn oauth-btn google-btn">
+                            <img src="https://lh3.googleusercontent.com/COxitq9jk9zSjz2QCivtLzSY97WpS8p9BStNis0m47HStS7mQX0X8c39ot0BwL4B"
+                                alt="Google">
+                            Login with Google
+                        </button>
+                        <button class="btn oauth-btn github-btn">
+                            <i class="fab fa-github"></i> Login with GitHub
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Theme Toggle Floating (Optional for auth page) -->
+    <div class="theme-switch-wrapper">
+        <i class="fas fa-moon dark-mode-toggle" id="auth-theme-toggle"></i>
+    </div>
+
+    <script type="module">
+        import { initAuthPage } from './js/auth.js';
+        document.addEventListener('DOMContentLoaded', initAuthPage);
+    </script>
+</body>
+
+</html>

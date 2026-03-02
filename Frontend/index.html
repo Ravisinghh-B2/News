@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NewsHub - Stay Informed | Latest News from 50+ Sources</title>
+    <meta name="description"
+        content="Get the latest breaking news, trending stories, and personalized updates from 50+ trusted sources. Categories include Technology, Business, Sports, World, Politics, Entertainment and more.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Content Security Policy (CSP) for Development -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self';
+        script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com;
+        style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
+        font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+        img-src 'self' data: https: http: *;
+        connect-src 'self' http://localhost:5000 http://127.0.0.1:5000 ws://localhost:5500 ws://127.0.0.1:5500 http://127.0.0.1:5500;
+        object-src 'none';
+        base-uri 'self';
+        form-action 'self';
+        frame-ancestors 'none';
+    ">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar sticky" id="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-newspaper"></i> NewsHub
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="/" data-link data-category="home">Home</a></li>
+                <li><a href="/trending" data-link data-category="trending">Trending</a></li>
+                <li class="dropdown">
+                    <a href="#" data-category="categories">Categories <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/category/world" data-link data-category="world">World</a></li>
+                        <li><a href="/category/technology" data-link data-category="technology">Technology</a></li>
+                        <li><a href="/category/business" data-link data-category="business">Business</a></li>
+                        <li><a href="/category/sports" data-link data-category="sports">Sports</a></li>
+                        <li><a href="/category/politics" data-link data-category="politics">Politics</a></li>
+                        <li><a href="/category/entertainment" data-link data-category="entertainment">Entertainment</a>
+                        </li>
+                        <li><a href="/category/science" data-link data-category="science">Science</a></li>
+                        <li><a href="/category/health" data-link data-category="health">Health</a></li>
+                    </ul>
+                </li>
+                <li class="search-icon"><i class="fas fa-search"></i></li>
+                <li id="auth-buttons">
+                    <button class="btn login-btn">Login</button>
+                    <!-- Signup button removed from navbar as per request -->
+                </li>
+                <li id="user-profile" style="display: none;">
+                    <div class="profile-thumb">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <ul class="dropdown-menu profile-dropdown">
+                        <li><a href="profile.html"><i class="fas fa-user"></i> My Profile</a></li>
+                        <li><a href="profile.html#saved"><i class="fas fa-bookmark"></i> Saved News</a></li>
+                        <li class="logout-link"><a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i>
+                                Logout</a></li>
+                    </ul>
+                </li>
+                <li><i class="fas fa-moon dark-mode-toggle"></i></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Stay Informed with <span>NewsHub</span></h1>
+            <p>Get the latest news from top Indian sources, personalized just for you.</p>
+            <div class="hero-buttons">
+                <button class="btn primary-btn explore-btn">Explore News</button>
+                <button class="btn secondary-btn personalized-btn">Get Personalized Feed</button>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="assets/images/hero-mockup.png" alt="NewsHub App">
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories">
+        <h2>Top Categories</h2>
+        <div class="category-grid">
+            <div class="category-card" data-link href="/category/technology" data-cat="technology">Technology</div>
+            <div class="category-card" data-link href="/category/business" data-cat="business">Business</div>
+            <div class="category-card" data-link href="/category/sports" data-cat="sports">Sports</div>
+            <div class="category-card" data-link href="/category/world" data-cat="world">World</a></div>
+            <div class="category-card" data-link href="/category/politics" data-cat="politics">Politics</div>
+            <div class="category-card" data-link href="/category/entertainment" data-cat="entertainment">Entertainment
+            </div>
+        </div>
+    </section>
+
+    <!-- News Section -->
+    <section class="news-section">
+        <h2 class="section-title">Latest News</h2>
+        <div class="news-grid" id="news-grid">
+            <!-- Dynamic cards will be inserted here -->
+        </div>
+        <div class="loader" id="loader" style="display: none;">
+            <div class="spinner"></div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-about">
+                <h3>NewsHub</h3>
+                <p>Your trusted source for Indian news.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div class="footer-social">
+                <h4>Follow Us</h4>
+                <div class="social-icons">
+                    <i class="fab fa-facebook"></i>
+                    <i class="fab fa-twitter"></i>
+                    <i class="fab fa-instagram"></i>
+                </div>
+            </div>
+        </div>
+        <p class="copyright">&copy; 2026 NewsHub. All rights reserved. By Adarsh Patel</p>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Search Overlay -->
+    <div id="search-overlay" class="search-overlay">
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Search news keywords...">
+            <button id="search-btn"><i class="fas fa-search"></i></button>
+            <i class="fas fa-times close-search" id="close-search"></i>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script type="module" src="js/app.js"></script>
+</body>
+
+</html>

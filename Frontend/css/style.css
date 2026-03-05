@@ -1889,3 +1889,128 @@ body.dark .skeleton-shimmer {
     padding: 0.4rem 0.6rem;
   }
 }
+/* -------------------------------------------------------------------
+   STRUCTURED CATEGORY LAYOUT
+   ------------------------------------------------------------------- */
+
+.structured-news-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+.news-section-block {
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.section-subtitle {
+  font-size: 1.75rem;
+  margin-bottom: 2rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--primary);
+  display: inline-block;
+  color: var(--dark);
+}
+
+.news-grid-inner, 
+.grouped-news-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.5rem;
+}
+
+@media (max-width: 1200px) {
+  .news-grid-inner, 
+  .grouped-news-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .news-grid-inner, 
+  .grouped-news-container {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .structured-news-container {
+    gap: 3rem;
+  }
+  
+  .section-subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* Group Tag */
+.group-tag {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(124, 58, 237, 0.1);
+  color: var(--secondary);
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  border-left: 3px solid var(--secondary);
+}
+
+body.dark .group-tag {
+  background: rgba(124, 58, 237, 0.2);
+}
+
+.error-msg {
+  text-align: center;
+  padding: 3rem;
+  color: var(--danger);
+  font-weight: 500;
+}
+
+.card-tags {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 2;
+}
+
+.news-category-tag, 
+.news-subcategory-tag {
+  position: static;
+  padding: 0.25rem 0.75rem;
+  border-radius: 2rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: white;
+  width: fit-content;
+}
+
+.news-category-tag {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+}
+
+.news-subcategory-tag {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.more-sources {
+  font-size: 0.7rem;
+  color: var(--gray);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+}

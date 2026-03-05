@@ -17,18 +17,22 @@ export function createNewsCard(article) {
              onerror="this.parentElement.classList.add('img-error'); this.style.display='none';">`
       : '<div class="img-placeholder"><i class="fas fa-newspaper"></i></div>'
     }
-      <span class="news-category-tag">${article.category || 'News'}</span>
+      <div class="card-tags">
+        <span class="news-category-tag">${article.category || 'News'}</span>
+        ${article.subCategory ? `<span class="news-subcategory-tag">${article.subCategory}</span>` : ''}
+      </div>
     </div>
     <div class="news-content">
       <h3 class="news-title">${article.title || 'Untitled'}</h3>
       <p class="news-description">${article.description || 'Click to read the full story from the original source.'}</p>
       ${article.alsoCoveredBy && article.alsoCoveredBy.length > 0
       ? `<div class="also-covered">
-            <span class="covered-label"><i class="fas fa-layer-group"></i> Also covered by:</span>
+            <span class="covered-label"><i class="fas fa-layer-group"></i> Coverage from ${article.alsoCoveredBy.length + 1} Sources</span>
             <div class="covered-sources">
-              ${article.alsoCoveredBy.slice(0, 3).map(s =>
+              ${article.alsoCoveredBy.slice(0, 4).map(s =>
         `<a href="${s.url}" target="_blank" rel="noopener" class="covered-source-link">${s.source}</a>`
       ).join('')}
+              ${article.alsoCoveredBy.length > 4 ? `<span class="more-sources">+${article.alsoCoveredBy.length - 4} more</span>` : ''}
             </div>
           </div>`
       : ''

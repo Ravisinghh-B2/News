@@ -48,9 +48,10 @@ export class TrendingPage {
 
         const promises = this.categories.map(async (cat) => {
             try {
-                const data = await fetchNews({ category: cat.key, page: 1, limit: 5 });
-                if (data.news && data.news.length > 0) {
-                    return { ...cat, news: data.news, lastUpdated: data.lastUpdated };
+                const data = await fetchNews({ category: cat.key });
+                const news = [...(data.indian || []), ...(data.worldwide || [])].slice(0, 5);
+                if (news.length > 0) {
+                    return { ...cat, news, lastUpdated: data.lastUpdated };
                 }
             } catch (err) {
                 console.warn(`[Trending] Failed to fetch ${cat.key}:`, err);

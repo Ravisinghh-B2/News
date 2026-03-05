@@ -5,7 +5,6 @@ import { initAuth } from './auth.js';
 import { Router } from './routes/Router.js';
 import { CategoryPage } from './pages/Category.js';
 import { TrendingPage } from './pages/Trending.js';
-import { TechnologyPage } from './pages/Technology.js';
 
 let router;
 
@@ -18,11 +17,26 @@ document.addEventListener('DOMContentLoaded', () => {
   initSearch();
   initScroll();
 
-  // Initialize Router with all category routes
+  // Define sub-categories for each section
+  const subCats = {
+    technology: ['AI Updates', 'Machine Learning', 'Software', 'Gadgets', 'Cybersecurity', 'Tech Startups', 'Tech Industry', 'Cloud & DevOps', 'Blockchain'],
+    business: ['Indian Economy', 'Indian Stock Market', 'RBI Updates', 'Startup Funding', 'Corporate News India', 'Global Markets', 'International Trade', 'Crypto Market', 'Global Corporate Mergers'],
+    sports: ['Indian Cricket', 'IPL', 'Indian Domestic Sports', 'Olympic Updates India', 'FIFA', 'NBA', 'Formula 1', 'International Cricket', 'World Championships'],
+    world: ['India International Relations', 'India–US/China/Pakistan Relations', 'Global Conflicts', 'Climate Change', 'UN Updates', 'Global Economy', 'International Summits', 'Natural Disasters'],
+    politics: ['Indian Parliament Updates', 'State Elections', 'Supreme Court Decisions', 'Central Government Policies', 'US Politics', 'European Politics', 'Global Elections'],
+    entertainment: ['Bollywood', 'Indian OTT', 'South Indian Cinema', 'Indian TV Industry', 'Hollywood', 'Global OTT Releases', 'International Award Shows', 'Music Industry']
+  };
+
+  // Initialize Router
   const routes = [
     { path: '/', page: new CategoryPage('general') },
     { path: '/trending', page: new TrendingPage() },
-    { path: '/category/technology', page: new TechnologyPage() },
+    { path: '/category/technology', page: new CategoryPage('technology', subCats.technology) },
+    { path: '/category/business', page: new CategoryPage('business', subCats.business) },
+    { path: '/category/sports', page: new CategoryPage('sports', subCats.sports) },
+    { path: '/category/world', page: new CategoryPage('world', subCats.world) },
+    { path: '/category/politics', page: new CategoryPage('politics', subCats.politics) },
+    { path: '/category/entertainment', page: new CategoryPage('entertainment', subCats.entertainment) },
     { path: '/category/:id', page: new CategoryPage() }
   ];
   router = new Router(routes);

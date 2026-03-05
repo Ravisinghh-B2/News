@@ -4,7 +4,7 @@ const {
     getTrendingNews,
     searchNews,
     getRelatedNews,
-    getTechSubCategory,
+    getSubCategory,
     getPersonalizedNews,
     getStatus
 } = require('../controllers/newsController');
@@ -19,7 +19,7 @@ router.get('/', newsApiLimiter, getNews);
 router.get('/trending', newsApiLimiter, getTrendingNews);
 router.get('/search', newsApiLimiter, searchNews);
 router.get('/related', newsApiLimiter, cacheResponse(10 * 60 * 1000), getRelatedNews);
-router.get('/technology/:subCategory', newsApiLimiter, getTechSubCategory);
+router.get('/:category/:subCategory', newsApiLimiter, getSubCategory);
 router.get('/status', getStatus);
 
 // Protected routes

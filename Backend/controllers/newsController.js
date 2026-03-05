@@ -1,24 +1,22 @@
 const newsService = require('../services/newsService');
 const { AppError } = require('../middleware/errorMiddleware');
 
-// @desc    Get news by category with pagination
+// @desc    Get structured news by category (Indian, World, Related)
 // @route   GET /api/v1/news
 exports.getNews = async (req, res, next) => {
   try {
-    let { category = 'general', page = 1, limit = 20 } = req.query;
-    page = parseInt(page) || 1;
-    limit = Math.min(parseInt(limit) || 20, 50); // Cap at 50
+    const { category = 'general', subCategory = null } = req.query;
 
-    const data = await newsService.fetchTopHeadlines(category, page, limit);
+    const data = await newsService.getStructuredCategoryNews(category, subCategory);
 
     res.json({
       success: true,
-      totalResults: data.totalResults,
-      currentPage: data.page,
-      totalPages: Math.ceil(data.totalResults / limit),
-      source: data.source,
-      lastUpdated: newsService.getLastUpdated(),
-      news: data.articles
+      category,
+      subCategory,
+      lastUpdated: data.lastUpdated,
+      indian: data.indian,
+      worldwide: data.worldwide,
+      relatedGroups: data.relatedGroups
     });
   } catch (error) {
     next(error);
@@ -92,20 +90,20 @@ exports.getRelatedNews = async (req, res, next) => {
   }
 };
 
-// @desc    Get technology sub-category news
-// @route   GET /api/v1/news/technology/:subCategory
-exports.getTechSubCategory = async (req, res, next) => {
+// @desc    Get sub-category news
+// @route   GET /api/v1/news/:category/:subCategory
+exports.getSubCategory = async (req, res, next) => {
   try {
-    const { subCategory } = req.params;
+    const { category, subCategory } = req.params;
     let { page = 1, limit = 20 } = req.query;
     page = parseInt(page) || 1;
     limit = Math.min(parseInt(limit) || 20, 50);
 
-    const data = await newsService.getTechSubCategoryNews(subCategory, page, limit);
+    const data = await newsService.getSubCategoryNews(category, subCategory, page, limit);
 
     res.json({
       success: true,
-      category: 'technology',
+      category,
       subCategory,
       totalResults: data.totalResults,
       source: data.source,

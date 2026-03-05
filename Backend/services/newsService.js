@@ -17,7 +17,13 @@ const VALID_CATEGORIES = [
 const CATEGORY_MAP = {
   'world': 'general',
   'politics': 'general',
-  'trending': 'general'
+  'trending': 'general',
+  'technology': 'technology',
+  'business': 'business',
+  'sports': 'sports',
+  'entertainment': 'entertainment',
+  'science': 'science',
+  'health': 'health'
 };
 
 function resolveCategory(cat) {
@@ -26,20 +32,64 @@ function resolveCategory(cat) {
   return CATEGORY_MAP[lower] || (VALID_CATEGORIES.includes(lower) ? lower : 'general');
 }
 
-// ─── Technology Sub-Categories (search keywords) ─────────────────────
-const TECH_SUB_CATEGORIES = {
-  'Artificial Intelligence': 'artificial intelligence AI',
+// ─── Sub-Categories (search keywords) ─────────────────────
+const SUB_CATEGORIES = {
+  // Technology
+  'AI Updates': 'artificial intelligence AI',
   'Machine Learning': 'machine learning deep learning',
-  'Cybersecurity': 'cybersecurity hacking data breach',
-  'Gadgets': 'gadgets smartphones devices',
-  'Software Updates': 'software update release',
-  'Startups': 'tech startup funding',
-  'Blockchain': 'blockchain cryptocurrency web3',
-  'Cloud Computing': 'cloud computing AWS Azure',
-  'Tech Industry': 'Google Apple Microsoft Meta Amazon',
-  'R&D': 'research innovation technology breakthrough',
   'Software': 'software development programming',
-  'Innovations': 'innovation technology breakthrough',
+  'Gadgets': 'gadgets smartphones devices',
+  'Cybersecurity': 'cybersecurity hacking data breach',
+  'Tech Startups': 'tech startup funding',
+  'Tech Industry': 'Google Apple Microsoft Meta Amazon',
+  'Cloud & DevOps': 'cloud computing AWS Azure DevOps',
+  'Blockchain': 'blockchain cryptocurrency web3',
+  // Business
+  'Indian Economy': 'Indian economy GDP budget',
+  'Indian Stock Market': 'Nifty Sensex Indian stock market share price',
+  'RBI Updates': 'RBI Reserve Bank of India repo rate',
+  'Startup Funding': 'Indian startup funding unicorn',
+  'Corporate News India': 'Reliance Tata Adani Indian corporate',
+  'Global Markets': 'global stock markets Dow Jones NASDAQ',
+  'International Trade': 'international trade exports imports',
+  'Crypto Market': 'cryptocurrency Bitcoin Ethereum crypto news',
+  'Global Corporate Mergers': 'corporate mergers acquisitions global',
+  // Sports
+  'Indian Cricket': 'Indian cricket team BCCI Virat Kohli Rohit Sharma',
+  'IPL': 'IPL Indian Premier League T20',
+  'Indian Domestic Sports': 'ISL Pro Kabaddi Indian domestic sports',
+  'Olympic Updates India': 'India Olympics Neeraj Chopra',
+  'FIFA': 'FIFA World Cup football soccer',
+  'NBA': 'NBA basketball',
+  'Formula 1': 'Formula 1 F1 racing',
+  'International Cricket': 'international cricket ICC Test ODI T20',
+  'World Championships': 'world championships athletics swimming',
+  // World
+  'India International Relations': 'India international relations diplomacy',
+  'India–US/China/Pakistan Relations': 'India US China Pakistan relations',
+  'Global Conflicts': 'global conflicts war crisis',
+  'Climate Change': 'climate change global warming environment',
+  'UN Updates': 'United Nations UN General Assembly',
+  'Global Economy': 'global economy inflation recession',
+  'International Summits': 'G20 G7 BRICS international summit',
+  'Natural Disasters': 'natural disaster earthquake flood',
+  // Politics
+  'Indian Parliament Updates': 'Indian Parliament Lok Sabha Rajya Sabha bill',
+  'State Elections': 'Indian state elections voting assembly',
+  'Supreme Court Decisions': 'Supreme Court of India judgment verdict',
+  'Central Government Policies': 'Indian government schemes policies Modi',
+  'US Politics': 'US politics Biden Trump Congress',
+  'European Politics': 'European politics EU Brexit',
+  'Global Elections': 'global elections voting polls',
+  // Entertainment
+  'Bollywood': 'Bollywood Hindi movies actors',
+  'Indian OTT': 'Indian OTT Netflix Prime Video Hotstar',
+  'South Indian Cinema': 'South Indian cinema Tollywood Kollywood KGF',
+  'Indian TV Industry': 'Indian TV shows reality TV',
+  'Hollywood': 'Hollywood movies news actors',
+  'Global OTT Releases': 'global OTT Netflix Disney+',
+  'International Award Shows': 'Oscars Grammys Golden Globes',
+  'Music Industry': 'music industry singers concerts'
 };
 
 // ─── Extract Keywords from Title ─────────────────────────────────────
@@ -158,7 +208,7 @@ function deduplicateArticles(articles) {
 }
 
 // ─── Normalize article from any API source ───────────────────────────
-function normalizeArticle(article, category, source = 'newsapi') {
+function normalizeArticle(article, category, source = 'newsapi', subCategory = null) {
   if (source === 'gnews') {
     return {
       title: article.title,
@@ -168,6 +218,7 @@ function normalizeArticle(article, category, source = 'newsapi') {
       imageUrl: article.image,
       source: article.source?.name || 'Unknown',
       category: category,
+      subCategory: subCategory,
       publishedAt: article.publishedAt,
       keywords: extractKeywords(article.title)
     };
@@ -181,19 +232,20 @@ function normalizeArticle(article, category, source = 'newsapi') {
     imageUrl: article.urlToImage,
     source: article.source?.name || article.source || 'Unknown',
     category: category,
+    subCategory: subCategory,
     publishedAt: article.publishedAt,
     keywords: extractKeywords(article.title)
   };
 }
 
 // ─── Fetch from NewsAPI (Primary) ────────────────────────────────────
-async function fetchFromNewsAPI(category, page = 1, pageSize = 20) {
+async function fetchFromNewsAPI(category, page = 1, pageSize = 20, country = 'in') {
   if (!NEWS_API_KEY || NEWS_API_KEY === 'your_newsapi_key') return null;
 
   const apiCategory = resolveCategory(category);
   const response = await axios.get(`${NEWS_API_URL}/top-headlines`, {
     params: {
-      country: 'in',
+      country: country,
       category: apiCategory,
       page,
       pageSize,
@@ -209,7 +261,7 @@ async function fetchFromNewsAPI(category, page = 1, pageSize = 20) {
 }
 
 // ─── Fetch from GNews (Fallback) ────────────────────────────────────
-async function fetchFromGNews(category, page = 1, pageSize = 10) {
+async function fetchFromGNews(category, page = 1, pageSize = 10, country = 'in') {
   if (!GNEWS_API_KEY) return null;
 
   const topicMap = {
@@ -224,7 +276,7 @@ async function fetchFromGNews(category, page = 1, pageSize = 10) {
     params: {
       topic,
       lang: 'en',
-      country: 'in',
+      country: country,
       max: pageSize,
       apikey: GNEWS_API_KEY
     },
@@ -238,18 +290,21 @@ async function fetchFromGNews(category, page = 1, pageSize = 10) {
 }
 
 // ─── Search via NewsAPI Everything ───────────────────────────────────
-async function fetchSearchResults(query, page = 1, pageSize = 20) {
+async function fetchSearchResults(query, page = 1, pageSize = 20, options = {}) {
   if (!NEWS_API_KEY || NEWS_API_KEY === 'your_newsapi_key') return { articles: [], totalResults: 0 };
 
+  const params = {
+    q: query,
+    page,
+    pageSize,
+    language: 'en',
+    sortBy: 'publishedAt',
+    apiKey: NEWS_API_KEY,
+    ...options
+  };
+
   const response = await axios.get(`${NEWS_API_URL}/everything`, {
-    params: {
-      q: query,
-      page,
-      pageSize,
-      language: 'en',
-      sortBy: 'publishedAt',
-      apiKey: NEWS_API_KEY
-    },
+    params,
     timeout: 10000
   });
 
@@ -260,8 +315,8 @@ async function fetchSearchResults(query, page = 1, pageSize = 20) {
 }
 
 // ─── Main: Fetch Top Headlines with Caching & Fallback ───────────────
-const fetchTopHeadlines = async (category = 'general', page = 1, pageSize = 20) => {
-  const cacheKey = `news_${category}_p${page}_s${pageSize}`;
+const fetchTopHeadlines = async (category = 'general', page = 1, pageSize = 20, country = 'in') => {
+  const cacheKey = `news_${category}_p${page}_s${pageSize}_c${country}`;
 
   // 1. Check in-memory cache
   const cached = getCache(cacheKey);
@@ -275,40 +330,41 @@ const fetchTopHeadlines = async (category = 'general', page = 1, pageSize = 20) 
 
   // 2. Try primary: NewsAPI
   try {
-    const result = await fetchFromNewsAPI(category, page, pageSize);
+    const result = await fetchFromNewsAPI(category, page, pageSize, country);
     if (result && result.articles.length > 0) {
       articles = result.articles;
       totalResults = result.totalResults;
       dataSource = 'newsapi';
     }
   } catch (err) {
-    console.warn(`[NewsAPI] Failed for ${category}:`, err.message);
+    console.warn(`[NewsAPI] Failed for ${category} (${country}):`, err.message);
   }
 
   // 3. Fallback: GNews
   if (articles.length === 0) {
     try {
-      const result = await fetchFromGNews(category, page, pageSize);
+      const result = await fetchFromGNews(category, page, pageSize, country);
       if (result && result.articles.length > 0) {
         articles = result.articles;
         totalResults = result.totalResults;
         dataSource = 'gnews';
       }
     } catch (err) {
-      console.warn(`[GNews] Failed for ${category}:`, err.message);
+      console.warn(`[GNews] Failed for ${category} (${country}):`, err.message);
     }
   }
 
-  // 4. Final fallback: MongoDB cache
+  // 4. Final fallback: MongoDB cache (only if country is 'in' or no country specified)
   if (articles.length === 0) {
     try {
-      const dbArticles = await News.find({ category: resolveCategory(category) })
+      const query = { category: resolveCategory(category) };
+      const dbArticles = await News.find(query)
         .sort({ publishedAt: -1 })
         .skip((page - 1) * pageSize)
         .limit(pageSize)
         .lean();
 
-      const totalCount = await News.countDocuments({ category: resolveCategory(category) });
+      const totalCount = await News.countDocuments(query);
 
       if (dbArticles.length > 0) {
         return {
@@ -339,12 +395,14 @@ const fetchTopHeadlines = async (category = 'general', page = 1, pageSize = 20) 
   if (articles.length > 0) {
     setCache(cacheKey, responseData, 10 * 60 * 1000);
 
-    // Async persist to MongoDB (don't block response)
-    const newsDocs = articles.map(a => ({
-      ...a,
-      fetchedAt: new Date()
-    }));
-    News.insertMany(newsDocs, { ordered: false }).catch(() => { });
+    // Async persist to MongoDB (only for 'in' country and first page to keep DB clean)
+    if (country === 'in' && page === 1) {
+      const newsDocs = articles.map(a => ({
+        ...a,
+        fetchedAt: new Date()
+      }));
+      News.insertMany(newsDocs, { ordered: false }).catch(() => { });
+    }
   }
 
   return responseData;
@@ -402,18 +460,19 @@ const getRelatedNews = async (category, excludeUrls = [], limit = 15) => {
   return relatedNews;
 };
 
-// ─── Get Technology Sub-Category News ────────────────────────────────
-const getTechSubCategoryNews = async (subCategory, page = 1, pageSize = 20) => {
-  const searchQuery = TECH_SUB_CATEGORIES[subCategory] || subCategory;
-  const cacheKey = `tech_${subCategory}_p${page}`;
+// ─── Get Sub-Category News ────────────────────────────────
+const getSubCategoryNews = async (category, subCategory, page = 1, pageSize = 20) => {
+  const searchQuery = SUB_CATEGORIES[subCategory] || subCategory;
+  const cacheKey = `sub_${category}_${subCategory}_p${page}`;
   const cached = getCache(cacheKey);
   if (cached) return { ...cached.data, source: 'cache' };
 
   try {
+    // For subcategories, we search globally but can filter by query
     const result = await fetchSearchResults(searchQuery, page, pageSize);
     const articles = deduplicateArticles(result.articles).map(a => ({
       ...a,
-      category: 'technology',
+      category,
       subCategory
     }));
     const responseData = { articles, totalResults: result.totalResults };
@@ -424,9 +483,74 @@ const getTechSubCategoryNews = async (subCategory, page = 1, pageSize = 20) => {
   }
 };
 
+// ─── Get Structured Category Content ──────────────────────────────────
+/**
+ * Dynamic structure:
+ * 1. Indian Current News (Top Section)
+ * 2. Worldwide News (Second Section)
+ * 3. Related / Similar News (Third Section - grouped)
+ */
+const getStructuredCategoryNews = async (category, subCategory = null) => {
+  const cacheKey = `structured_${category}_${subCategory || 'all'}`;
+  const cached = getCache(cacheKey);
+  if (cached) return cached.data;
+
+  try {
+    let indianNews = [];
+    let worldNews = [];
+
+    if (subCategory) {
+      // Subcategory logic: we search with country context in query if possible
+      const q = SUB_CATEGORIES[subCategory] || subCategory;
+      const resInd = await fetchSearchResults(`${q} India`, 1, 10);
+      const resWorld = await fetchSearchResults(`${q} world`, 1, 10);
+      indianNews = resInd.articles;
+      worldNews = resWorld.articles;
+    } else {
+      // Main category: Use country-based headlines
+      const resInd = await fetchTopHeadlines(category, 1, 15, 'in');
+      const resWorld = await fetchTopHeadlines(category, 1, 15, 'us'); // US as proxy for 'Worldwide' for NewsAPI
+      indianNews = resInd.articles;
+      worldNews = resWorld.articles;
+    }
+
+    // Deduplicate between sections
+    const seenUrls = new Set();
+    const cleanIndian = indianNews.filter(a => {
+      if (seenUrls.has(a.url)) return false;
+      seenUrls.add(a.url);
+      return true;
+    });
+
+    const cleanWorld = worldNews.filter(a => {
+      if (seenUrls.has(a.url)) return false;
+      seenUrls.add(a.url);
+      return true;
+    });
+
+    // Grouping logic for "Related Similar News"
+    // Combine all and group
+    const allCombined = [...cleanIndian, ...cleanWorld];
+    const grouped = groupSimilarArticles(allCombined, 0.3); // Lower threshold for "Related"
+
+    const responseData = {
+      indian: cleanIndian,
+      worldwide: cleanWorld,
+      relatedGroups: grouped.filter(g => g.related.length > 0).slice(0, 10),
+      lastUpdated: new Date().toISOString()
+    };
+
+    setCache(cacheKey, responseData, 10 * 60 * 1000);
+    return responseData;
+  } catch (error) {
+    console.error('Structured news fetch error:', error);
+    throw error;
+  }
+};
+
 // ─── Personalized Feed ───────────────────────────────────────────────
 const getPersonalizedNews = async (interests) => {
-  const promises = interests.map(cat => fetchTopHeadlines(cat, 1, 10));
+  const promises = interests.map(cat => fetchTopHeadlines(cat, 1, 10, 'in'));
   const results = await Promise.allSettled(promises);
   const articles = results
     .filter(r => r.status === 'fulfilled')
@@ -474,7 +598,8 @@ module.exports = {
   fetchTopHeadlines,
   searchNews,
   getRelatedNews,
-  getTechSubCategoryNews,
+  getSubCategoryNews,
+  getStructuredCategoryNews,
   getPersonalizedNews,
   getTrendingNews,
   refreshAllCategories,

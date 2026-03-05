@@ -17,13 +17,20 @@ async function apiFetch(endpoint, options = {}) {
 
 // ─── News Endpoints ──────────────────────────────────────────────────
 
-export async function fetchNews({ category = 'general', page = 1, limit = 20 } = {}) {
+export async function fetchNews({ category = 'general', subCategory = null } = {}) {
   try {
-    const params = new URLSearchParams({ category, page, limit });
+    const params = new URLSearchParams({ category });
+    if (subCategory) params.append('subCategory', subCategory);
     const data = await apiFetch(`/news?${params}`);
     return data;
   } catch (error) {
-    return { success: false, news: [], totalResults: 0, currentPage: 1, totalPages: 1 };
+    return {
+      success: false,
+      indian: [],
+      worldwide: [],
+      relatedGroups: [],
+      lastUpdated: null
+    };
   }
 }
 

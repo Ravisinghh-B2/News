@@ -5,6 +5,9 @@ import { initAuth } from './auth.js';
 import { Router } from './routes/Router.js';
 import { CategoryPage } from './pages/Category.js';
 import { TrendingPage } from './pages/Trending.js';
+import { StaticPage } from './pages/StaticPage.js';
+import { InterestsPage } from './pages/Interests.js';
+import { initContactForm } from './contact.js';
 
 let router;
 
@@ -31,6 +34,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const routes = [
     { path: '/', page: new CategoryPage('general') },
     { path: '/trending', page: new TrendingPage() },
+    { path: '/interests', page: new InterestsPage() },
+    { path: '/about', page: new StaticPage('About NewsHub', 'about.html') },
+    { path: '/privacy', page: new StaticPage('Privacy Policy', 'privacy.html') },
+    { path: '/terms', page: new StaticPage('Terms of Service', 'terms.html') },
+    { path: '/contact', page: new StaticPage('Contact Us', 'contact.html', initContactForm) },
     { path: '/category/technology', page: new CategoryPage('technology', subCats.technology) },
     { path: '/category/business', page: new CategoryPage('business', subCats.business) },
     { path: '/category/sports', page: new CategoryPage('sports', subCats.sports) },
@@ -40,7 +48,50 @@ document.addEventListener('DOMContentLoaded', () => {
     { path: '/category/:id', page: new CategoryPage() }
   ];
   router = new Router(routes);
+  window.router = router;
+  initPhoneTime();
+  initPhonePreview();
 });
+
+function initPhoneTime() {
+  const timeEl = document.querySelector('.status-bar .time');
+  if (!timeEl) return;
+  const updateTime = () => {
+    const now = new Date();
+    timeEl.textContent = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
+  };
+  updateTime();
+  setInterval(updateTime, 60000);
+}
+
+function initPhonePreview() {
+  // Category clicks inside phone
+  document.querySelectorAll('.mini-cat').forEach(cat => {
+    cat.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const path = cat.dataset.path;
+      if (path && router) {
+        // Highlight active cat in mini preview
+        document.querySelectorAll('.mini-cat').forEach(c => c.classList.remove('active'));
+        cat.classList.add('active');
+        
+        // Navigate real site
+        router.navigateTo(path);
+        
+        // Optional: Scroll real site to news section
+        document.querySelector('.news-section')?.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
+
+  // News card clicks inside phone
+  document.querySelectorAll('.mini-news-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const url = card.dataset.url;
+      if (url) window.open(url, '_blank');
+    });
+  });
+}
 
 // ─── App Init ────────────────────────────────────────────────────────
 function initApp() {
@@ -195,6 +246,11 @@ async function loadPersonalizedFeed() {
   }
   clearNewsGrid();
   document.getElementById('news-grid').innerHTML = getSkeleton(6);
+  
+  // Update section title
+  const sectionTitle = document.querySelector('.news-section h2');
+  if (sectionTitle) sectionTitle.textContent = 'Personalized Feed for You';
+
   try {
     const data = await getPersonalizedFeed(user.token);
     clearNewsGrid();

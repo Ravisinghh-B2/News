@@ -6,17 +6,32 @@ export function createNewsCard(article) {
   card.className = 'news-card';
   card.setAttribute('role', 'article');
 
-  const imageUrl = article.imageUrl || article.urlToImage || '';
+  const categoryStr = (article.category || 'general').toLowerCase();
+  
+  const placeholders = {
+      technology: '/assets/placeholders/technology.jpg',
+      sports: '/assets/placeholders/sports.jpg',
+      business: '/assets/placeholders/business.jpg',
+      health: '/assets/placeholders/health.jpg',
+      science: '/assets/placeholders/science.jpg',
+      entertainment: '/assets/placeholders/entertainment.jpg',
+      world: '/assets/placeholders/world.jpg',
+      general: '/assets/placeholders/news.jpg'
+  };
+
+  const categoryPlaceholder = placeholders[categoryStr] || placeholders['general'];
+  const defaultImage = '/assets/placeholders/news.jpg';
+
+  const imageUrl = article.image || article.imageUrl || article.urlToImage || article.thumbnail || '';
+  const finalImage = imageUrl || categoryPlaceholder;
+
   const publishedTime = article.publishedAt ? timeAgo(article.publishedAt) : '';
   const user = getFrom('user');
 
   card.innerHTML = `
     <div class="img-wrapper">
-      ${imageUrl
-      ? `<img src="${imageUrl}" alt="${(article.title || '').substring(0, 80)}" loading="lazy"
-             onerror="this.parentElement.classList.add('img-error'); this.style.display='none';">`
-      : '<div class="img-placeholder"><i class="fas fa-newspaper"></i></div>'
-    }
+      <img src="${finalImage}" alt="${(article.title || '').substring(0, 80)}" loading="lazy"
+           onerror="this.onerror=null; this.src='${categoryPlaceholder}';">
       <div class="card-tags">
         <span class="news-category-tag">${article.category || 'News'}</span>
         ${article.subCategory ? `<span class="news-subcategory-tag">${article.subCategory}</span>` : ''}
@@ -84,16 +99,34 @@ export function createCompactCard(article) {
   const card = document.createElement('div');
   card.className = 'compact-card';
 
+  const categoryStr = (article.category || 'general').toLowerCase();
+  
+  const placeholders = {
+      technology: '/assets/placeholders/technology.jpg',
+      sports: '/assets/placeholders/sports.jpg',
+      business: '/assets/placeholders/business.jpg',
+      health: '/assets/placeholders/health.jpg',
+      science: '/assets/placeholders/science.jpg',
+      entertainment: '/assets/placeholders/entertainment.jpg',
+      world: '/assets/placeholders/world.jpg',
+      general: '/assets/placeholders/news.jpg'
+  };
+
+  const categoryPlaceholder = placeholders[categoryStr] || placeholders['general'];
+  const defaultImage = '/assets/placeholders/news.jpg';
+
+  const imageUrl = article.image || article.imageUrl || article.urlToImage || article.thumbnail || '';
+  const finalImage = imageUrl || categoryPlaceholder;
+
   const publishedTime = article.publishedAt ? timeAgo(article.publishedAt) : '';
 
   card.innerHTML = `
-    <div class="compact-img">
-      ${article.imageUrl
-      ? `<img src="${article.imageUrl}" alt="" loading="lazy" onerror="this.style.display='none'">`
-      : '<div class="compact-img-placeholder"><i class="fas fa-newspaper"></i></div>'
-    }
+  <div class="compact-img" style="flex: 0 0 100px; height: 100px; overflow: hidden; border-radius: 0.5rem;">
+      <img src="${finalImage}" alt="${(article.title || '').substring(0, 80)}" loading="lazy" 
+           onerror="this.onerror=null; this.src='${categoryPlaceholder}';" 
+           style="width: 100%; height: 100%; object-fit: cover;">
     </div>
-    <div class="compact-info">
+    <div class="compact-info" style="flex: 1; min-width: 0;">
       <h4 class="compact-title">
         <a href="${article.url || '#'}" target="_blank" rel="noopener">${article.title || 'Untitled'}</a>
       </h4>

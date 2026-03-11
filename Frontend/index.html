@@ -12,31 +12,18 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <base href="/">
+    <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
-    <!-- Content Security Policy (CSP) for Development -->
-    <meta http-equiv="Content-Security-Policy" content="
-        default-src 'self';
-        script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com;
-        style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
-        font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
-        img-src 'self' data: https: http: *;
-        connect-src 'self' http://localhost:5000 http://127.0.0.1:5000 ws://localhost:5500 ws://127.0.0.1:5500 http://127.0.0.1:5500;
-        object-src 'none';
-        base-uri 'self';
-        form-action 'self';
-        frame-ancestors 'none';
-    ">
 </head>
 
 <body>
     <!-- Navbar -->
     <nav class="navbar sticky" id="navbar">
         <div class="nav-container">
-            <div class="logo">
+            <a href="/" data-link class="logo">
                 <i class="fas fa-newspaper"></i> NewsHub
-            </div>
+            </a>
             <ul class="nav-menu" id="nav-menu">
                 <li><a href="/" data-link data-category="home">Home</a></li>
                 <li><a href="/trending" data-link data-category="trending">Trending</a></li>
@@ -65,6 +52,7 @@
                     </div>
                     <ul class="dropdown-menu profile-dropdown">
                         <li><a href="profile.html"><i class="fas fa-user"></i> My Profile</a></li>
+                        <li><a href="/interests" data-link><i class="fas fa-tasks"></i> Customize Interests</a></li>
                         <li><a href="profile.html#saved"><i class="fas fa-bookmark"></i> Saved News</a></li>
                         <li class="logout-link"><a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i>
                                 Logout</a></li>
@@ -91,7 +79,79 @@
             </div>
         </div>
         <div class="hero-image">
-            <img src="assets/images/hero-mockup.png" alt="NewsHub App">
+            <div class="phone-container">
+                <div class="phone-frame">
+                    <div class="phone-screen">
+                        <!-- Mini Navbar -->
+                        <div class="mini-navbar">
+                            <div class="status-bar">
+                                <span class="time">9:41</span>
+                                <div class="icons">
+                                    <i class="fas fa-signal"></i>
+                                    <i class="fas fa-wifi"></i>
+                                    <i class="fas fa-battery-full"></i>
+                                </div>
+                            </div>
+                            <div class="mini-nav-content">
+                                <span class="mini-logo">NewsHub</span>
+                                <i class="fas fa-search"></i>
+                            </div>
+                        </div>
+
+                        <!-- Mini Categories -->
+                        <div class="mini-categories-wrapper">
+                            <div class="mini-categories">
+                                <span class="mini-cat active" data-path="/">Home</span>
+                                <span class="mini-cat" data-path="/trending">Trending</span>
+                                <span class="mini-cat" data-path="/category/technology">Tech</span>
+                                <span class="mini-cat" data-path="/category/business">Business</span>
+                                <span class="mini-cat" data-path="/category/sports">Sports</span>
+                                <span class="mini-cat" data-path="/category/politics">Politics</span>
+                            </div>
+                        </div>
+
+                        <!-- Mini News Feed -->
+                        <div class="mini-news-feed">
+                            <div class="mini-news-card" data-url="https://news.google.com">
+                                <div class="mini-card-tag trending">Breaking</div>
+                                <h4>India launches new AI policy to boost digital growth</h4>
+                                <div class="mini-card-footer">
+                                    <span>BBC News</span> • <span>2m ago</span>
+                                </div>
+                            </div>
+                            <div class="mini-news-card" data-url="https://news.google.com">
+                                <div class="mini-card-tag tech">Technology</div>
+                                <h4>New AI chip announced by startup ecosystem</h4>
+                                <div class="mini-card-footer">
+                                    <span>TechCrunch</span> • <span>15m ago</span>
+                                </div>
+                            </div>
+                            <div class="mini-news-card" data-url="https://news.google.com">
+                                <div class="mini-card-tag sports">Sports</div>
+                                <h4>India wins cricket series against Australia</h4>
+                                <div class="mini-card-footer">
+                                    <span>ESPN</span> • <span>1h ago</span>
+                                </div>
+                            </div>
+                            <div class="mini-news-card" data-url="https://news.google.com">
+                                <div class="mini-card-tag politics">Politics</div>
+                                <h4>Parliament introduces new bill for social welfare</h4>
+                                <div class="mini-card-footer">
+                                    <span>The Hindu</span> • <span>3h ago</span>
+                                </div>
+                            </div>
+                            <div class="mini-news-card" data-url="https://news.google.com">
+                                <div class="mini-card-tag entertainment">Entertainment</div>
+                                <h4>New blockbuster movie breaks box office records</h4>
+                                <div class="mini-card-footer">
+                                    <span>Variety</span> • <span>5h ago</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="phone-reflection"></div>
+            </div>
         </div>
     </section>
 
@@ -102,10 +162,9 @@
             <div class="category-card" data-link href="/category/technology" data-cat="technology">Technology</div>
             <div class="category-card" data-link href="/category/business" data-cat="business">Business</div>
             <div class="category-card" data-link href="/category/sports" data-cat="sports">Sports</div>
-            <div class="category-card" data-link href="/category/world" data-cat="world">World</a></div>
+            <div class="category-card" data-link href="/category/world" data-cat="world">World</div>
             <div class="category-card" data-link href="/category/politics" data-cat="politics">Politics</div>
-            <div class="category-card" data-link href="/category/entertainment" data-cat="entertainment">Entertainment
-            </div>
+            <div class="category-card" data-link href="/category/entertainment" data-cat="entertainment">Entertainment</div>
         </div>
     </section>
 
@@ -127,11 +186,12 @@
                 <p>Your trusted source for Indian news.</p>
             </div>
             <div class="footer-links">
-                <h4>Quick Links</h4>
+                <h4>Company</h4>
                 <ul>
-                    <li><a href="#">About</a></li>
-                    <li><a href="#">Contact</a></li>
-                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="/about" data-link>About Us</a></li>
+                    <li><a href="/contact" data-link>Contact</a></li>
+                    <li><a href="/privacy" data-link>Privacy Policy</a></li>
+                    <li><a href="/terms" data-link>Terms of Service</a></li>
                 </ul>
             </div>
             <div class="footer-social">
@@ -163,7 +223,7 @@
     <!-- Toast Notification -->
     <div id="toast-container" class="toast-container"></div>
 
-    <script type="module" src="js/app.js"></script>
+    <script type="module" src="/js/app.js"></script>
 </body>
 
 </html>

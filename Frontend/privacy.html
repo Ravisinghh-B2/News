@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - NewsHub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body class="static-page">
+    <!-- Navbar -->
+    <nav class="navbar sticky" id="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <a href="/"><i class="fas fa-newspaper"></i> NewsHub</a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/">Home</a></li>
+                <li><i class="fas fa-moon dark-mode-toggle"></i></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <section class="page-hero">
+            <div class="container text-center">
+                <h1>Privacy <span>Policy</span></h1>
+                <p>Last Updated: March 11, 2026</p>
+            </div>
+        </section>
+
+        <section class="section-padding">
+            <div class="container legal-content">
+                <h2>1. Introduction</h2>
+                <p>At NewsHub, we take your privacy seriously. This Privacy Policy explains how we collect, use,
+                    disclose, and safeguard your information when you visit our website and use our news aggregation
+                    services.</p>
+
+                <h2>2. Information We Collect</h2>
+                <h3>Account Data</h3>
+                <p>When you register for an account, we collect your name, email address, username, and encrypted
+                    password.</p>
+                <h3>Usage Data</h3>
+                <p>We collect information about which articles you read, save, and your preferred news categories to
+                    improve your personalized feed.</p>
+                <h3>Device Data</h3>
+                <p>We may collect information about your device, including IP address, browser type, and operating
+                    system for security and analytics purposes.</p>
+
+                <h2>3. How We Use Information</h2>
+                <ul>
+                    <li><strong>Personalization:</strong> To provide you with news that matches your interests.</li>
+                    <li><strong>Security:</strong> To protect your account and our platform from unauthorized access and
+                        fraud.</li>
+                    <li><strong>Analytics:</strong> To understand how our users interact with the site and improve the
+                        user experience.</li>
+                    <li><strong>Communication:</strong> To send you important updates about your account or changes to
+                        our terms.</li>
+                </ul>
+
+                <h2>4. Cookies and Tracking</h2>
+                <p>We use cookies to maintain your session, remember your theme preferences (Light/Dark mode), and
+                    track site performance via basic analytics tools.</p>
+
+                <h2>5. Data Security</h2>
+                <p>We implement industry-standard security measures, including HTTPS encryption and salt-hashed
+                    passwords, to protect your personal data. However, no method of transmission over the internet is
+                    100% secure.</p>
+
+                <h2>6. Third Party Services</h2>
+                <p>NewsHub integrates with third-party APIs (such as NewsAPI and GNews) to fetch content. These services
+                    may collect anonymous data about the requests. We also use FontAwesome and Google Fonts for our
+                    interface.</p>
+
+                <h2>7. User Rights</h2>
+                <p>You have the right to access, correct, or delete your personal data. You can manage your profile
+                    information and saved articles directly from your account settings.</p>
+
+                <h2>8. Policy Updates</h2>
+                <p>We may update this policy from time to time. We will notify you of any significant changes by
+                    posting the new policy on this page.</p>
+
+                <h2>9. Contact Information</h2>
+                <p>If you have any questions about this Privacy Policy, please contact us at:</p>
+                <p><strong>Email:</strong> privacy@newshub.com</p>
+                <p><strong>Address:</strong> Digital Plaza, Tech City, IN</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-about">
+                <h3>NewsHub</h3>
+                <p>Your trusted source for news.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="privacy.html">Privacy Policy</a></li>
+                    <li><a href="terms.html">Terms of Service</a></li>
+                </ul>
+            </div>
+            <div class="footer-social">
+                <h4>Follow Us</h4>
+                <div class="social-icons">
+                    <i class="fab fa-facebook"></i>
+                    <i class="fab fa-twitter"></i>
+                    <i class="fab fa-instagram"></i>
+                </div>
+            </div>
+        </div>
+        <p class="copyright">&copy; 2026 NewsHub. All rights reserved.</p>
+    </footer>
+
+    <div id="toast-container" class="toast-container"></div>
+
+    <script type="module">
+        import { initDarkMode } from './js/utils.js';
+        document.addEventListener('DOMContentLoaded', initDarkMode);
+    </script>
+</body>
+
+</html>

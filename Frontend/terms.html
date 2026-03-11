@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - NewsHub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body class="static-page">
+    <!-- Navbar -->
+    <nav class="navbar sticky" id="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <a href="/"><i class="fas fa-newspaper"></i> NewsHub</a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/">Home</a></li>
+                <li><i class="fas fa-moon dark-mode-toggle"></i></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <section class="page-hero">
+            <div class="container text-center">
+                <h1>Terms of <span>Service</span></h1>
+                <p>Please read these terms carefully before using our platform.</p>
+            </div>
+        </section>
+
+        <section class="section-padding">
+            <div class="container legal-content">
+                <h2>1. Introduction</h2>
+                <p>Welcome to NewsHub. By accessing or using our website, you agree to be bound by these Terms of
+                    Service. If you do not agree, please do not use our services.</p>
+
+                <h2>2. Acceptable Use</h2>
+                <p>You agree to use NewsHub only for lawful purposes. You are prohibited from:</p>
+                <ul>
+                    <li>Attempting to scrape or crawl our data without permission.</li>
+                    <li>Interfering with the security of the platform.</li>
+                    <li>Using the platform to spread hate speech or illegal content.</li>
+                    <li>Impersonating others or creating fake accounts.</li>
+                </ul>
+
+                <h2>3. User Responsibilities</h2>
+                <p>You are responsible for maintaining the confidentiality of your account credentials. You are
+                    responsible for all activities that occur under your account.</p>
+
+                <h2>4. Content Ownership</h2>
+                <p>NewsHub aggregates content from various third-party sources. All headlines, images, and descriptions
+                    belong to their respective owners. NewsHub does not claim ownership of the news articles themselves.
+                </p>
+
+                <h2>5. Third Party Content</h2>
+                <p>NewsHub contains links to external websites. We are not responsible for the content, privacy
+                    policies, or practices of any third-party sites. Your interaction with these sites is at your own
+                    risk.</p>
+
+                <h2>6. Account Termination</h2>
+                <p>We reserve the right to suspend or terminate your account at our sole discretion, without notice, for
+                    conduct that we believe violates these Terms or is harmful to other users or our business interests.
+                </p>
+
+                <h2>7. Disclaimer</h2>
+                <p>NewsHub provides information "as is" and "as available." We do not guarantee the accuracy,
+                    completeness, or timeliness of the news aggregated. Use of the information provided is at your own risk.</p>
+
+                <h2>8. Legal Jurisdiction</h2>
+                <p>These terms shall be governed by and construed in accordance with the laws of the jurisdiction in
+                    which our company is registered.</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-about">
+                <h3>NewsHub</h3>
+                <p>Your trusted source for news.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="privacy.html">Privacy Policy</a></li>
+                    <li><a href="terms.html">Terms of Service</a></li>
+                </ul>
+            </div>
+            <div class="footer-social">
+                <h4>Follow Us</h4>
+                <div class="social-icons">
+                    <i class="fab fa-facebook"></i>
+                    <i class="fab fa-twitter"></i>
+                    <i class="fab fa-instagram"></i>
+                </div>
+            </div>
+        </div>
+        <p class="copyright">&copy; 2026 NewsHub. All rights reserved.</p>
+    </footer>
+
+    <div id="toast-container" class="toast-container"></div>
+
+    <script type="module">
+        import { initDarkMode } from './js/utils.js';
+        document.addEventListener('DOMContentLoaded', initDarkMode);
+    </script>
+</body>
+
+</html>

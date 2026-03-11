@@ -137,3 +137,15 @@ export async function deleteSavedArticle(id, token) {
   });
   return response.json();
 }
+
+export async function updateInterests(interests, token) {
+  const response = await fetch(`${API_BASE}/users/interests`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify({ interests })
+  });
+  return response.json();
+}

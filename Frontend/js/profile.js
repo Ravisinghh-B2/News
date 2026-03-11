@@ -1,9 +1,7 @@
 import { getFrom, showToast, saveTo } from './utils.js';
 import { getSavedArticles, deleteSavedArticle } from './api.js';
 
-document.addEventListener('DOMContentLoaded', initProfile);
-
-async function initProfile() {
+export async function initProfile() {
     const user = getFrom('user');
     if (!user || !user.token) {
         window.location.href = 'auth.html';

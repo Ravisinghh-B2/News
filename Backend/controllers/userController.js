@@ -100,3 +100,23 @@ exports.changePassword = async (req, res, next) => {
         next(error);
     }
 };
+
+// @desc    Update user interests
+// @route   PUT /api/v1/users/interests
+exports.updateInterests = async (req, res, next) => {
+    try {
+        const { interests } = req.body;
+        if (!Array.isArray(interests)) {
+            return res.status(400).json({ message: 'Interests must be an array' });
+        }
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        user.interests = interests;
+        await user.save();
+        res.json({ message: 'Interests updated successfully', interests: user.interests });
+    } catch (error) {
+        next(error);
+    }
+};

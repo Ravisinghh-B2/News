@@ -33,6 +33,14 @@ app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 
+// ─── Additional Security Headers ────────────────────────────────────────
+app.use(require('helmet').referrerPolicy({ policy: 'no-referrer' }));
+app.use(require('helmet').xssFilter());
+app.use(require('helmet').noSniff());
+app.use(require('helmet').frameguard({ action: 'deny' }));
+app.use(require('helmet').hidePoweredBy());
+app.use(require('helmet').permittedCrossDomainPolicies({ permittedPolicies: 'none' }));
+
 // ─── Core Middleware ─────────────────────────────────────────────────
 app.use(compression());
 app.use(cors({
@@ -56,7 +64,7 @@ app.use((req, res, next) => {
 });
 
 // ─── Health Check ────────────────────────────────────────────────────
-app.get('/', (req, res) => {
+app.get(['/', '/api/v1'], (req, res) => {
   res.json({
     message: 'NewsHub API is running 🚀',
     version: '2.0.0',
@@ -65,7 +73,7 @@ app.get('/', (req, res) => {
       trending: '/api/v1/news/trending',
       search: '/api/v1/news/search?q=keyword',
       related: '/api/v1/news/related?category=technology',
-      techSub: '/api/v1/news/technology/:subCategory',
+      technologySubCategory: '/api/v1/news/technology/:subCategory',
       status: '/api/v1/news/status',
       auth: '/api/v1/auth'
     }
@@ -81,7 +89,7 @@ app.use('/api/v1/users', userRoutes);
 app.use((req, res) => {
   res.status(404).json({
     success: false,
-    error: `Route not found: ${req.method} ${req.originalUrl}`
+    error: 'Route not found'
   });
 });
 

@@ -1,37 +1,62 @@
 const API_BASE = 'http://127.0.0.1:5000/api/v1';
 
+// Request lock map to prevent duplicate simultaneous requests
+const pendingRequests = new Map();
+
 // ─── Generic Fetch Helper ────────────────────────────────────────────
-async function apiFetch(endpoint, options = {}) {
-  try {
-    const response = await fetch(`${API_BASE}${endpoint}`, options);
-    if (!response.ok) {
-      const errData = await response.json().catch(() => ({}));
-      throw new Error(errData.error || `HTTP ${response.status}`);
+async function apiFetch(endpoint, options = {}, retries = 1) {
+  // Return the existing promise if a request for this endpoint is already in flight
+  if (pendingRequests.has(endpoint)) {
+    return pendingRequests.get(endpoint);
+  }
+
+  const fetchPromise = (async () => {
+    let lastError;
+    for (let i = 0; i <= retries; i++) {
+      try {
+        const response = await fetch(`${API_BASE}${endpoint}`, options);
+        if (!response.ok) {
+          const errData = await response.json().catch(() => ({}));
+          const error = new Error(errData.error || `HTTP ${response.status}`);
+          error.status = response.status;
+          throw error;
+        }
+        return await response.json();
+      } catch (error) {
+        lastError = error;
+        console.warn(`[API] ${endpoint} attempt ${i + 1} failed:`, error.message);
+        
+        // Immediately stop retrying if it's a 429 Too Many Requests
+        if (error.status === 429) {
+            throw error;
+        }
+
+        if (i < retries) {
+          // 1s -> 2s exponential backoff for other errors like 5xx or network drops
+          const delay = 1000 * Math.pow(2, i);
+          await new Promise(res => setTimeout(res, delay));
+        }
+      }
     }
-    return await response.json();
-  } catch (error) {
-    console.error(`[API] ${endpoint}:`, error.message);
-    throw error;
+    throw lastError;
+  })();
+
+  pendingRequests.set(endpoint, fetchPromise);
+  
+  try {
+    return await fetchPromise;
+  } finally {
+    // Remove from lock map once request completes (success or fail)
+    pendingRequests.delete(endpoint);
   }
 }
 
 // ─── News Endpoints ──────────────────────────────────────────────────
 
 export async function fetchNews({ category = 'general', subCategory = null } = {}) {
-  try {
-    const params = new URLSearchParams({ category });
-    if (subCategory) params.append('subCategory', subCategory);
-    const data = await apiFetch(`/news?${params}`);
-    return data;
-  } catch (error) {
-    return {
-      success: false,
-      indian: [],
-      worldwide: [],
-      relatedGroups: [],
-      lastUpdated: null
-    };
-  }
+  const params = new URLSearchParams({ category });
+  if (subCategory) params.append('subCategory', subCategory);
+  return await apiFetch(`/news?${params}`);
 }
 
 export async function fetchTrendingNews(page = 1, limit = 20) {

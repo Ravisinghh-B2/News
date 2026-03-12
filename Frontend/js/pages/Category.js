@@ -4,6 +4,8 @@ import { createSkeleton } from '../components/Skeleton.js';
 import { SidebarChannels } from '../components/SidebarChannels.js';
 import { lastUpdatedText } from '../utils.js';
 
+import { debounce } from '../utils.js';
+
 export class CategoryPage {
     constructor(category, subCategories = []) {
         this.category = category;
@@ -12,6 +14,9 @@ export class CategoryPage {
             : [];
         this.activeSubCategory = '';
         this.sidebar = new SidebarChannels();
+        this.isFetching = false;
+        this.currentAbortController = null;
+        this.debouncedFilter = debounce((btn, subKey) => this.executeSubFilter(btn, subKey), 300);
     }
 
     async render(params = {}) {
@@ -62,31 +67,55 @@ export class CategoryPage {
         await this.loadNewsData(this.category, this.activeSubCategory, newsSection);
     }
 
-    async loadNewsData(category, subCategory, newsSection) {
+    async loadNewsData(category, subCategory, newsSection, isFallback = false, fallbackCount = 0) {
+        if (this.isFetching && !isFallback) return; // Prevent duplicate concurrent fetches
+        
         const grid = document.getElementById('news-grid');
         if (!grid) return;
         
-        grid.innerHTML = createSkeleton(6);
+        this.isFetching = true;
 
-        // Remove old last updated bar
-        const oldUpdateEl = newsSection.querySelector('.last-updated-bar');
-        if (oldUpdateEl) oldUpdateEl.remove();
+        if (!isFallback) {
+            grid.innerHTML = createSkeleton(6);
+            // Remove old last updated bar
+            const oldUpdateEl = newsSection.querySelector('.last-updated-bar');
+            if (oldUpdateEl) oldUpdateEl.remove();
+        }
 
         try {
             const data = await fetchNews({ category, subCategory });
-            grid.innerHTML = '';
+            const hasIndian = data.indian && data.indian.length > 0;
+            const hasWorld = data.worldwide && data.worldwide.length > 0;
             
-            if ((data.indian && data.indian.length > 0) || (data.worldwide && data.worldwide.length > 0)) {
-                if (data.indian && data.indian.length > 0) {
+            if (hasIndian || hasWorld) {
+                grid.innerHTML = '';
+                
+                if (hasIndian) {
                     this.renderSection(grid, 'Indian Coverage', data.indian, 'india-section');
                 }
-                if (data.worldwide && data.worldwide.length > 0) {
+                if (hasWorld) {
                     this.renderSection(grid, 'Global Coverage', data.worldwide, 'world-section');
                 }
                 if (data.relatedGroups && data.relatedGroups.length > 0) {
                     this.renderGroupedSection(grid, 'Context & Analysis', data.relatedGroups, 'related-groups-section');
                 }
+
+                if (data.lastUpdated) {
+                    this.showLastUpdated(newsSection, data.lastUpdated);
+                }
             } else {
+                const FALLBACKS = ['top', 'breaking', 'technology', 'business', 'sports', 'entertainment'];
+                let nextFallbackIdx = FALLBACKS.indexOf(category) + 1;
+                if (FALLBACKS.indexOf(category) === -1) {
+                    nextFallbackIdx = 0;
+                }
+
+                if (nextFallbackIdx < FALLBACKS.length && !subCategory && fallbackCount < 2) {
+                    const nextCategory = FALLBACKS[nextFallbackIdx];
+                    console.log(`No results for ${category}, falling back to ${nextCategory}... (Attempt ${fallbackCount + 1})`);
+                    return await this.loadNewsData(nextCategory, null, newsSection, true, fallbackCount + 1);
+                }
+
                 grid.innerHTML = `
                     <div class="empty-state">
                         <i class="fas fa-newspaper"></i>
@@ -96,13 +125,34 @@ export class CategoryPage {
                     </div>`;
             }
 
-            if (data.lastUpdated) {
-                this.showLastUpdated(newsSection, data.lastUpdated);
-            }
-
         } catch (error) {
             console.error('Render error:', error);
-            grid.innerHTML = '<p class="error-msg">Failed to load news. Please try again later.</p>';
+            
+            if (error.status === 429) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-clock"></i>
+                        <h3>Service Busy</h3>
+                        <p>News service is temporarily busy. Please try again later.</p>
+                    </div>`;
+            } else {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>Failed to load news</h3>
+                        <p>There was a problem communicating with our servers. (${error.message || 'Network error'})</p>
+                        <button class="btn primary-btn" id="retry-btn">Try Again</button>
+                    </div>`;
+                
+                const retryBtn = grid.querySelector('#retry-btn');
+                if (retryBtn) {
+                    retryBtn.addEventListener('click', () => {
+                        this.loadNewsData(category, subCategory, newsSection, isFallback, fallbackCount);
+                    });
+                }
+            }
+        } finally {
+            this.isFetching = false;
         }
     }
 
@@ -163,25 +213,27 @@ export class CategoryPage {
             btn.dataset.sub = sub.key;
             btn.setAttribute('role', 'tab');
             btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
-            btn.addEventListener('click', () => this.handleSubFilter(btn, sub.key));
+            
+            // UI updates immediately for snappiness, API call is debounced
+            btn.addEventListener('click', () => {
+                const filterBar = document.querySelector('.sub-filter-bar');
+                if (filterBar) {
+                    filterBar.querySelectorAll('.filter-btn').forEach(b => {
+                        b.classList.remove('active');
+                        b.setAttribute('aria-selected', 'false');
+                    });
+                }
+                btn.classList.add('active');
+                btn.setAttribute('aria-selected', 'true');
+                
+                this.debouncedFilter(btn, sub.key);
+            });
             filterBar.appendChild(btn);
         });
     }
 
-    async handleSubFilter(btn, subKey) {
+    async executeSubFilter(btn, subKey) {
         if (this.activeSubCategory === subKey) return;
-
-        // Update UI immediately
-        const filterBar = document.querySelector('.sub-filter-bar');
-        if (filterBar) {
-            filterBar.querySelectorAll('.filter-btn').forEach(b => {
-                b.classList.remove('active');
-                b.setAttribute('aria-selected', 'false');
-            });
-        }
-        btn.classList.add('active');
-        btn.setAttribute('aria-selected', 'true');
-
         this.activeSubCategory = subKey;
         const newsSection = document.querySelector('.news-section');
         

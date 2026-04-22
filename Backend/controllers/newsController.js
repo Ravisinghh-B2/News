@@ -1,4 +1,5 @@
 const newsService = require('../services/newsService');
+const newsScraperService = require('../services/newsScraperService');
 const { AppError } = require('../middleware/errorMiddleware');
 
 // @desc    Get structured news by category (Indian, World, Related)
@@ -139,4 +140,79 @@ exports.getStatus = async (req, res) => {
     lastUpdated: newsService.getLastUpdated(),
     serverTime: new Date().toISOString()
   });
+};
+
+// ═════════════════════════════════════════════════════════════════════════════
+// NEWS SCRAPER ENDPOINTS - Extract Open Graph & Meta Tags
+// ═════════════════════════════════════════════════════════════════════════════
+
+/**
+ * @desc    Scrape multiple news URLs and extract Open Graph metadata
+ * @route   POST /api/v1/news/scrape
+ * @access  Public
+ * @body    { urls: ['https://...', 'https://...', ...] } - Array of up to 50 URLs
+ * 
+ * Response includes:
+ * - title: Article title (from og:title or fallback)
+ * - description: Article description
+ * - image: Article image (converted to absolute URL)
+ * - url: Original URL
+ * - source: Domain name
+ * - missingTags: Array of missing meta tags
+ * - suggestedMetaTags: Suggested meta tags for better SEO
+ * - metaTagsHtml: Ready-to-use HTML meta tag block
+ */
+exports.scrapeNewsUrls = async (req, res, next) => {
+  try {
+    const { urls } = req.body;
+
+    // Validation
+    if (!urls || !Array.isArray(urls)) {
+      throw new AppError('URLs array is required in request body', 400);
+    }
+
+    if (urls.length === 0) {
+      throw new AppError('At least one URL is required', 400);
+    }
+
+    if (urls.length > 50) {
+      throw new AppError('Maximum 50 URLs allowed per request', 400);
+    }
+
+    // Scrape all URLs
+    const result = await newsScraperService.scrapeMultipleUrls(urls);
+
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * @desc    Scrape a single news URL and extract Open Graph metadata
+ * @route   POST /api/v1/news/scrape/single
+ * @access  Public
+ * @body    { url: 'https://...' } - Single URL to scrape
+ * 
+ * Response includes full metadata, missing tags, suggested tags, and HTML meta block
+ */
+exports.scrapeSingleUrl = async (req, res, next) => {
+  try {
+    const { url } = req.body;
+
+    // Validation
+    if (!url || typeof url !== 'string') {
+      throw new AppError('URL is required and must be a string', 400);
+    }
+
+    // Scrape single URL
+    const result = await newsScraperService.processUrl(url);
+
+    res.json({
+      success: result.success,
+      data: result
+    });
+  } catch (error) {
+    next(error);
+  }
 };

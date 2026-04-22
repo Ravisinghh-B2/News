@@ -121,8 +121,15 @@ export class CategoryPage {
                         <i class="fas fa-newspaper"></i>
                         <h3>No news found</h3>
                         <p>We couldn't find any articles for "${subCategory || category}". Try another category.</p>
-                        <button class="btn primary-btn" onclick="window.router.navigateTo('/')">Back to Home</button>
+                        <button class="btn primary-btn" id="back-home-btn">Back to Home</button>
                     </div>`;
+
+                const backHomeBtn = grid.querySelector('#back-home-btn');
+                if (backHomeBtn) {
+                    backHomeBtn.addEventListener('click', () => {
+                        window.router.navigateTo('/');
+                    });
+                }
             }
 
         } catch (error) {
@@ -176,17 +183,12 @@ export class CategoryPage {
         
         const displayName = category.charAt(0).toUpperCase() + category.slice(1);
         header.innerHTML = `
-            <button class="back-btn-inline" data-link href="/">
+            <a class="back-btn-inline" data-link href="#/">
                 <i class="fas fa-arrow-left"></i> Home
-            </button>
+            </a>
             <h1 class="category-title">${displayName} News</h1>
             <p class="category-subtitle">Deep dive into ${displayName} with coverage from 50+ trusted sources.</p>
         `;
-
-        header.querySelector('.back-btn-inline').addEventListener('click', (e) => {
-            e.preventDefault();
-            window.router.navigateTo('/');
-        });
 
         section.prepend(header);
     }

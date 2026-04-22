@@ -210,6 +210,123 @@ body.dark .navbar {
   transform: scale(0.95);
 }
 
+.btn.full-width {
+  width: 100%;
+}
+
+.mt-2 {
+  margin-top: 2rem;
+}
+
+.icon-btn {
+  border: none;
+  background: transparent;
+  padding: 0.35rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.success-icon {
+  font-size: 4rem;
+  color: var(--success);
+  margin-bottom: 1rem;
+}
+
+.contact-note {
+  margin-bottom: 2rem;
+  color: var(--gray);
+}
+
+.social-icons-spaced {
+  margin-top: 1rem;
+}
+
+.skeleton-line {
+  border-radius: 4px;
+}
+
+.skeleton-line.short {
+  height: 14px;
+  width: 35%;
+  margin-bottom: 0.75rem;
+}
+
+.skeleton-line.long {
+  height: 22px;
+  width: 90%;
+  margin-bottom: 0.5rem;
+}
+
+.skeleton-line.medium {
+  height: 22px;
+  width: 70%;
+  margin-bottom: 1rem;
+}
+
+.skeleton-line.full {
+  height: 14px;
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.skeleton-line.xlong {
+  height: 14px;
+  width: 80%;
+  margin-bottom: 1.5rem;
+}
+
+.skeleton-line.longer {
+  height: 24px;
+  width: 90%;
+  margin-bottom: 1rem;
+}
+
+.skeleton-line.tall {
+  height: 60px;
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.skeleton-line.sidebar-long {
+  height: 14px;
+  width: 90%;
+  margin-bottom: 6px;
+}
+
+.skeleton-line.sidebar-medium {
+  height: 14px;
+  width: 60%;
+  margin-bottom: 6px;
+}
+
+.skeleton-line.sidebar-small {
+  height: 10px;
+  width: 40%;
+}
+
+.skeleton-line.footer-small {
+  height: 12px;
+  width: 30%;
+}
+
+.skeleton-line.footer-xsmall {
+  height: 12px;
+  width: 20%;
+}
+
+.news-footer.no-border {
+  border-top: none;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  padding: 0.35rem;
+  color: red;
+}
+
 .primary-btn {
   background: linear-gradient(135deg, var(--primary), var(--secondary));
   color: white;

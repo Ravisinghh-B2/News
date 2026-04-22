@@ -29,8 +29,8 @@ export function initContactForm() {
             await new Promise(resolve => setTimeout(resolve, 1500));
             
             // Show success
-            form.style.display = 'none';
-            successMsg.style.display = 'block';
+            form.classList.add('hide');
+            successMsg.classList.remove('hide');
             showToast('Message sent successfully!', 'success');
             
             console.log('Contact form submitted:', formData);
@@ -41,4 +41,17 @@ export function initContactForm() {
             form.style.opacity = '1';
         }
     });
+
+    const sendAnotherBtn = document.getElementById('send-another-btn');
+    if (sendAnotherBtn) {
+        sendAnotherBtn.addEventListener('click', () => {
+            form.reset();
+            form.classList.remove('hide');
+            successMsg.classList.add('hide');
+            btnText.textContent = 'Send Message';
+            form.style.pointerEvents = 'auto';
+            form.style.opacity = '1';
+        });
+    }
 }
+

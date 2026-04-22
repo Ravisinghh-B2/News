@@ -88,12 +88,12 @@ export function getSkeleton(count = 6) {
       <div class="news-card skeleton-card" aria-hidden="true">
         <div class="img-wrapper skeleton-shimmer"></div>
         <div class="news-content">
-          <div class="skeleton-shimmer" style="height: 12px; width: 40%; margin-bottom: 1rem; border-radius: 4px;"></div>
-          <div class="skeleton-shimmer" style="height: 24px; width: 90%; margin-bottom: 1rem; border-radius: 4px;"></div>
-          <div class="skeleton-shimmer" style="height: 60px; width: 100%; margin-bottom: 2rem; border-radius: 4px;"></div>
-          <div class="news-footer" style="border:none;">
-            <div class="skeleton-shimmer" style="height: 12px; width: 30%; border-radius: 4px;"></div>
-            <div class="skeleton-shimmer" style="height: 12px; width: 20%; border-radius: 4px;"></div>
+          <div class="skeleton-shimmer skeleton-line footer-small"></div>
+          <div class="skeleton-shimmer skeleton-line longer"></div>
+          <div class="skeleton-shimmer skeleton-line tall"></div>
+          <div class="news-footer no-border">
+            <div class="skeleton-shimmer skeleton-line footer-small"></div>
+            <div class="skeleton-shimmer skeleton-line footer-xsmall"></div>
           </div>
         </div>
       </div>

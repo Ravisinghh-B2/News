@@ -134,6 +134,30 @@ export async function getPersonalizedFeed(token) {
   return response.json();
 }
 
+export async function updateProfile(profileData, token) {
+  const response = await fetch(`${API_BASE}/users/profile`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify(profileData)
+  });
+  return response.json();
+}
+
+export async function changePassword(currentPassword, newPassword, token) {
+  const response = await fetch(`${API_BASE}/users/change-password`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify({ currentPassword, newPassword })
+  });
+  return response.json();
+}
+
 // ─── User Actions ────────────────────────────────────────────────────
 
 export async function saveArticle(articleData, token) {

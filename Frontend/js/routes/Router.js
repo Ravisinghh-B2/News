@@ -1,29 +1,45 @@
-// Simple SPA Router
+// Simple hash-based SPA Router
 export class Router {
     constructor(routes) {
         this.routes = routes;
         this.container = document.getElementById('news-grid'); // Main content area
-        window.addEventListener('popstate', () => this.handleRoute());
+        window.addEventListener('hashchange', () => this.handleRoute());
 
         // Intercept link clicks
         document.addEventListener('click', (e) => {
             const link = e.target.closest('[data-link]');
             if (link) {
                 e.preventDefault();
-                this.navigateTo(link.getAttribute('href'));
+                const target = link.getAttribute('href') || '';
+                this.navigateTo(target);
             }
         });
+
+        if (!window.location.hash) {
+            window.location.hash = '/';
+        }
 
         this.handleRoute();
     }
 
     navigateTo(path) {
-        window.history.pushState({}, '', path);
-        this.handleRoute();
+        if (!path || path === '/') {
+            window.location.hash = '/';
+            return;
+        }
+
+        if (path.startsWith('#')) {
+            window.location.hash = path;
+        } else if (path.startsWith('/')) {
+            window.location.hash = `#${path}`;
+        } else {
+            window.location.hash = `#/${path}`;
+        }
     }
 
     handleRoute() {
-        const path = window.location.pathname;
+        const hash = window.location.hash || '#/';
+        const path = hash.startsWith('#') ? hash.slice(1) : hash;
         const route = this.matchRoute(path);
 
         if (route) {
@@ -31,7 +47,7 @@ export class Router {
                 route.page.render(route.params);
             }
         } else {
-            // 404 or home
+            // Default fallback to home
             this.navigateTo('/');
         }
     }

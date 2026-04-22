@@ -1,5 +1,5 @@
 import { getFrom, showToast, saveTo } from './utils.js';
-import { getSavedArticles, deleteSavedArticle } from './api.js';
+import { getSavedArticles, deleteSavedArticle, updateProfile, changePassword } from './api.js';
 
 export async function initProfile() {
     const user = getFrom('user');
@@ -18,8 +18,12 @@ export async function initProfile() {
     tabBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             const tab = btn.dataset.tab;
-            tabBtns.forEach(b => b.classList.remove('active'));
+            tabBtns.forEach(b => {
+                b.classList.remove('active');
+                b.setAttribute('aria-selected', 'false');
+            });
             btn.classList.add('active');
+            btn.setAttribute('aria-selected', 'true');
 
             Object.keys(sections).forEach(key => {
                 sections[key].classList.add('hide');
@@ -40,6 +44,58 @@ export async function initProfile() {
     document.getElementById('edit-name').value = user.name;
     document.getElementById('edit-username').value = user.username;
     document.getElementById('edit-email').value = user.email;
+
+    const editProfileForm = document.getElementById('edit-profile-form');
+    const changePasswordForm = document.getElementById('change-password-form');
+
+    if (editProfileForm) {
+        editProfileForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const profileData = {
+                name: document.getElementById('edit-name').value,
+                username: document.getElementById('edit-username').value,
+                email: document.getElementById('edit-email').value
+            };
+
+            try {
+                const updated = await updateProfile(profileData, user.token);
+                if (updated.message) {
+                    showToast(updated.message, 'success');
+                } else {
+                    showToast('Profile updated successfully', 'success');
+                    const savedUser = { ...user, ...updated };
+                    saveTo('user', savedUser);
+                }
+            } catch (err) {
+                showToast('Failed to update profile', 'error');
+            }
+        });
+    }
+
+    if (changePasswordForm) {
+        changePasswordForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const currentPassword = document.getElementById('current-password').value;
+            const newPassword = document.getElementById('new-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            if (newPassword !== confirmPassword) {
+                return showToast('New passwords do not match', 'error');
+            }
+
+            try {
+                const result = await changePassword(currentPassword, newPassword, user.token);
+                if (result.message) {
+                    showToast(result.message, 'success');
+                    changePasswordForm.reset();
+                } else {
+                    showToast('Password update failed', 'error');
+                }
+            } catch (err) {
+                showToast(err.message || 'Failed to change password', 'error');
+            }
+        });
+    }
 
     // Load saved articles initially if focused
     if (window.location.hash === '#saved') {
@@ -82,8 +138,8 @@ function createSavedCard(article) {
             <p class="news-description">${article.description || 'No description'}</p>
             <div class="news-footer">
                 <span class="news-source">${article.source}</span>
-                <button class="btn delete-btn" style="color:red; cursor:pointer; background:none; border:none;">
-                    <i class="fas fa-trash"></i>
+                <button type="button" class="btn delete-btn" aria-label="Remove saved article">
+                    <i class="fas fa-trash" aria-hidden="true"></i>
                 </button>
             </div>
         </div>

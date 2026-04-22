@@ -12,55 +12,62 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap"
         rel="stylesheet">
-    <base href="/">
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
 <body>
     <!-- Navbar -->
-    <nav class="navbar sticky" id="navbar">
+    <nav class="navbar sticky" id="navbar" role="navigation" aria-label="Main navigation">
         <div class="nav-container">
-            <a href="/" data-link class="logo">
-                <i class="fas fa-newspaper"></i> NewsHub
+            <a href="#/" data-link class="logo">
+                <i class="fas fa-newspaper" aria-hidden="true"></i> NewsHub
             </a>
             <ul class="nav-menu" id="nav-menu">
-                <li><a href="/" data-link data-category="home">Home</a></li>
-                <li><a href="/trending" data-link data-category="trending">Trending</a></li>
+                <li><a href="#/" data-link data-category="home">Home</a></li>
+                <li><a href="#/trending" data-link data-category="trending">Trending</a></li>
                 <li class="dropdown">
-                    <a href="#" data-category="categories">Categories <i class="fas fa-chevron-down"></i></a>
+                    <a href="#" data-category="categories">Categories <i class="fas fa-chevron-down" aria-hidden="true"></i></a>
                     <ul class="dropdown-menu">
-                        <li><a href="/category/world" data-link data-category="world">World</a></li>
-                        <li><a href="/category/technology" data-link data-category="technology">Technology</a></li>
-                        <li><a href="/category/business" data-link data-category="business">Business</a></li>
-                        <li><a href="/category/sports" data-link data-category="sports">Sports</a></li>
-                        <li><a href="/category/politics" data-link data-category="politics">Politics</a></li>
-                        <li><a href="/category/entertainment" data-link data-category="entertainment">Entertainment</a>
+                        <li><a href="#/category/world" data-link data-category="world">World</a></li>
+                        <li><a href="#/category/technology" data-link data-category="technology">Technology</a></li>
+                        <li><a href="#/category/business" data-link data-category="business">Business</a></li>
+                        <li><a href="#/category/sports" data-link data-category="sports">Sports</a></li>
+                        <li><a href="#/category/politics" data-link data-category="politics">Politics</a></li>
+                        <li><a href="#/category/entertainment" data-link data-category="entertainment">Entertainment</a>
                         </li>
-                        <li><a href="/category/science" data-link data-category="science">Science</a></li>
-                        <li><a href="/category/health" data-link data-category="health">Health</a></li>
+                        <li><a href="#/category/science" data-link data-category="science">Science</a></li>
+                        <li><a href="#/category/health" data-link data-category="health">Health</a></li>
                     </ul>
                 </li>
-                <li class="search-icon"><i class="fas fa-search"></i></li>
+                <li>
+                    <button type="button" class="icon-btn search-icon" aria-label="Open search">
+                        <i class="fas fa-search" aria-hidden="true"></i>
+                    </button>
+                </li>
                 <li id="auth-buttons">
-                    <button class="btn login-btn">Login</button>
+                    <button type="button" class="btn login-btn">Login</button>
                     <!-- Signup button removed from navbar as per request -->
                 </li>
-                <li id="user-profile" style="display: none;">
-                    <div class="profile-thumb">
+                <li id="user-profile" class="hide">
+                    <div class="profile-thumb" aria-hidden="true">
                         <i class="fas fa-user-circle"></i>
                     </div>
                     <ul class="dropdown-menu profile-dropdown">
                         <li><a href="profile.html"><i class="fas fa-user"></i> My Profile</a></li>
-                        <li><a href="/interests" data-link><i class="fas fa-tasks"></i> Customize Interests</a></li>
+                        <li><a href="#/interests" data-link><i class="fas fa-tasks"></i> Customize Interests</a></li>
                         <li><a href="profile.html#saved"><i class="fas fa-bookmark"></i> Saved News</a></li>
                         <li class="logout-link"><a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i>
                                 Logout</a></li>
                     </ul>
                 </li>
-                <li><i class="fas fa-moon dark-mode-toggle"></i></li>
+                <li>
+                    <button type="button" class="icon-btn dark-mode-toggle" aria-label="Toggle dark mode">
+                        <i class="fas fa-moon" aria-hidden="true"></i>
+                    </button>
+                </li>
             </ul>
-            <div class="hamburger" id="hamburger">
+            <div class="hamburger" id="hamburger" aria-label="Toggle navigation menu" role="button" tabindex="0">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -101,12 +108,12 @@
                         <!-- Mini Categories -->
                         <div class="mini-categories-wrapper">
                             <div class="mini-categories">
-                                <span class="mini-cat active" data-path="/">Home</span>
-                                <span class="mini-cat" data-path="/trending">Trending</span>
-                                <span class="mini-cat" data-path="/category/technology">Tech</span>
-                                <span class="mini-cat" data-path="/category/business">Business</span>
-                                <span class="mini-cat" data-path="/category/sports">Sports</span>
-                                <span class="mini-cat" data-path="/category/politics">Politics</span>
+                                <span class="mini-cat active" data-path="#/">Home</span>
+                                <span class="mini-cat" data-path="#/trending">Trending</span>
+                                <span class="mini-cat" data-path="#/category/technology">Tech</span>
+                                <span class="mini-cat" data-path="#/category/business">Business</span>
+                                <span class="mini-cat" data-path="#/category/sports">Sports</span>
+                                <span class="mini-cat" data-path="#/category/politics">Politics</span>
                             </div>
                         </div>
 
@@ -159,12 +166,12 @@
     <section class="categories">
         <h2>Top Categories</h2>
         <div class="category-grid">
-            <div class="category-card" data-link href="/category/technology" data-cat="technology">Technology</div>
-            <div class="category-card" data-link href="/category/business" data-cat="business">Business</div>
-            <div class="category-card" data-link href="/category/sports" data-cat="sports">Sports</div>
-            <div class="category-card" data-link href="/category/world" data-cat="world">World</div>
-            <div class="category-card" data-link href="/category/politics" data-cat="politics">Politics</div>
-            <div class="category-card" data-link href="/category/entertainment" data-cat="entertainment">Entertainment</div>
+            <a class="category-card" href="#/category/technology" data-link data-cat="technology">Technology</a>
+            <a class="category-card" href="#/category/business" data-link data-cat="business">Business</a>
+            <a class="category-card" href="#/category/sports" data-link data-cat="sports">Sports</a>
+            <a class="category-card" href="#/category/world" data-link data-cat="world">World</a>
+            <a class="category-card" href="#/category/politics" data-link data-cat="politics">Politics</a>
+            <a class="category-card" href="#/category/entertainment" data-link data-cat="entertainment">Entertainment</a>
         </div>
     </section>
 
@@ -174,12 +181,12 @@
         <div class="news-grid" id="news-grid">
             <!-- Dynamic cards will be inserted here -->
         </div>
-        <div class="loader" id="loader" style="display: none;">
+        <div class="loader hide" id="loader">
             <div class="spinner"></div>
         </div>
     </section>
 
-    <footer>
+    <footer role="contentinfo">
         <div class="footer-content">
             <div class="footer-about">
                 <h3>NewsHub</h3>
@@ -188,10 +195,10 @@
             <div class="footer-links">
                 <h4>Company</h4>
                 <ul>
-                    <li><a href="/about" data-link>About Us</a></li>
-                    <li><a href="/contact" data-link>Contact</a></li>
-                    <li><a href="/privacy" data-link>Privacy Policy</a></li>
-                    <li><a href="/terms" data-link>Terms of Service</a></li>
+                    <li><a href="#/about" data-link>About Us</a></li>
+                    <li><a href="#/contact" data-link>Contact</a></li>
+                    <li><a href="#/privacy" data-link>Privacy Policy</a></li>
+                    <li><a href="#/terms" data-link>Terms of Service</a></li>
                 </ul>
             </div>
             <div class="footer-social">
@@ -207,23 +214,25 @@
     </footer>
 
     <!-- Back to Top Button -->
-    <button id="back-to-top" class="back-to-top">
-        <i class="fas fa-arrow-up"></i>
+    <button id="back-to-top" class="back-to-top" type="button" aria-label="Scroll back to top">
+        <i class="fas fa-arrow-up" aria-hidden="true"></i>
     </button>
 
     <!-- Search Overlay -->
     <div id="search-overlay" class="search-overlay">
         <div class="search-container">
-            <input type="text" id="search-input" placeholder="Search news keywords...">
-            <button id="search-btn"><i class="fas fa-search"></i></button>
-            <i class="fas fa-times close-search" id="close-search"></i>
+            <input type="text" id="search-input" placeholder="Search news keywords..." aria-label="Search news">
+            <button type="button" id="search-btn" aria-label="Search news"><i class="fas fa-search" aria-hidden="true"></i></button>
+            <button type="button" class="icon-btn close-search" id="close-search" aria-label="Close search">
+                <i class="fas fa-times" aria-hidden="true"></i>
+            </button>
         </div>
     </div>
 
     <!-- Toast Notification -->
     <div id="toast-container" class="toast-container"></div>
 
-    <script type="module" src="/js/app.js"></script>
+    <script type="module" src="js/app.js"></script>
 </body>
 
 </html>

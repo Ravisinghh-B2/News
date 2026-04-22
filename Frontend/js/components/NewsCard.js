@@ -30,8 +30,7 @@ export function createNewsCard(article) {
 
   card.innerHTML = `
     <div class="img-wrapper">
-      <img src="${finalImage}" alt="${(article.title || '').substring(0, 80)}" loading="lazy"
-           onerror="this.onerror=null; this.src='${categoryPlaceholder}';">
+      <img src="${finalImage}" alt="${(article.title || '').substring(0, 80)}" loading="lazy">
       <div class="card-tags">
         <span class="news-category-tag">${article.category || 'News'}</span>
         ${article.subCategory ? `<span class="news-subcategory-tag">${article.subCategory}</span>` : ''}
@@ -66,6 +65,14 @@ export function createNewsCard(article) {
       </div>
     </div>
   `;
+
+  // Image fallback
+  const imageEl = card.querySelector('.img-wrapper img');
+  if (imageEl) {
+    imageEl.addEventListener('error', () => {
+      imageEl.src = categoryPlaceholder;
+    });
+  }
 
   // Save button handler
   if (user) {
@@ -121,12 +128,10 @@ export function createCompactCard(article) {
   const publishedTime = article.publishedAt ? timeAgo(article.publishedAt) : '';
 
   card.innerHTML = `
-  <div class="compact-img" style="flex: 0 0 100px; height: 100px; overflow: hidden; border-radius: 0.5rem;">
-      <img src="${finalImage}" alt="${(article.title || '').substring(0, 80)}" loading="lazy" 
-           onerror="this.onerror=null; this.src='${categoryPlaceholder}';" 
-           style="width: 100%; height: 100%; object-fit: cover;">
+  <div class="compact-img">
+      <img src="${finalImage}" alt="${(article.title || '').substring(0, 80)}" loading="lazy">
     </div>
-    <div class="compact-info" style="flex: 1; min-width: 0;">
+    <div class="compact-info">
       <h4 class="compact-title">
         <a href="${article.url || '#'}" target="_blank" rel="noopener">${article.title || 'Untitled'}</a>
       </h4>
@@ -142,6 +147,13 @@ export function createCompactCard(article) {
     }
     </div>
   `;
+
+  const compactImg = card.querySelector('.compact-img img');
+  if (compactImg) {
+    compactImg.addEventListener('error', () => {
+      compactImg.src = categoryPlaceholder;
+    });
+  }
 
   return card;
 }

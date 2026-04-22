@@ -30,18 +30,18 @@
 
 <body class="profile-body">
     <!-- Navbar -->
-    <nav class="navbar sticky" id="navbar">
+    <nav class="navbar sticky" id="navbar" role="navigation" aria-label="Main navigation">
         <div class="nav-container">
             <div class="logo">
-                <a href="/" data-link><i class="fas fa-newspaper"></i> NewsHub</a>
+                <a href="#/" data-link><i class="fas fa-newspaper" aria-hidden="true"></i> NewsHub</a>
             </div>
             <ul class="nav-menu">
-                <li><a href="/" data-link>Home</a></li>
+                <li><a href="#/" data-link>Home</a></li>
             </ul>
         </div>
     </nav>
 
-    <main class="profile-page">
+    <main class="profile-page" role="main">
         <header class="profile-header">
             <div class="avatar-large" id="profile-initial">U</div>
             <div class="profile-info">
@@ -50,26 +50,26 @@
             </div>
         </header>
 
-        <div class="profile-tabs">
-            <div class="tab-btn active" data-tab="account">Account Settings</div>
-            <div class="tab-btn" data-tab="saved">Saved News History</div>
+        <div class="profile-tabs" role="tablist" aria-label="Profile sections">
+            <button type="button" class="tab-btn active" data-tab="account" role="tab" aria-selected="true">Account Settings</button>
+            <button type="button" class="tab-btn" data-tab="saved" role="tab" aria-selected="false">Saved News History</button>
         </div>
 
-        <section id="account-tab" class="profile-content">
+        <section id="account-tab" class="profile-content" role="tabpanel">
             <div class="profile-grid">
                 <div class="form-card">
                     <h2>Edit Profile</h2>
                     <form id="edit-profile-form">
                         <div class="input-group">
-                            <label>Full Name</label>
+                            <label for="edit-name">Full Name</label>
                             <input type="text" id="edit-name" required>
                         </div>
                         <div class="input-group">
-                            <label>Username</label>
+                            <label for="edit-username">Username</label>
                             <input type="text" id="edit-username" required>
                         </div>
                         <div class="input-group">
-                            <label>Email</label>
+                            <label for="edit-email">Email</label>
                             <input type="email" id="edit-email" required>
                         </div>
                         <button type="submit" class="btn primary-btn auth-btn">Update Profile</button>
@@ -80,15 +80,15 @@
                     <h2>Change Password</h2>
                     <form id="change-password-form">
                         <div class="input-group">
-                            <label>Current Password</label>
+                            <label for="current-password">Current Password</label>
                             <input type="password" id="current-password" required>
                         </div>
                         <div class="input-group">
-                            <label>New Password</label>
+                            <label for="new-password">New Password</label>
                             <input type="password" id="new-password" required>
                         </div>
                         <div class="input-group">
-                            <label>Confirm New Password</label>
+                            <label for="confirm-password">Confirm New Password</label>
                             <input type="password" id="confirm-password" required>
                         </div>
                         <button type="submit" class="btn primary-btn auth-btn">Change Password</button>
@@ -97,8 +97,8 @@
             </div>
         </section>
 
-        <section id="saved-tab" class="profile-content hide">
-            <h2 style="margin-bottom: 2rem;">Your Saved Articles</h2>
+        <section id="saved-tab" class="profile-content hide" role="tabpanel">
+            <h2 class="section-title">Your Saved Articles</h2>
             <div id="saved-news-grid" class="news-grid">
                 <!-- Articles dynamically populated -->
             </div>
@@ -106,7 +106,7 @@
     </main>
 
     <!-- Footer -->
-    <footer>
+    <footer role="contentinfo">
         <div class="footer-content">
             <div class="footer-about">
                 <h3>NewsHub</h3>

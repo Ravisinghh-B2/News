@@ -149,7 +149,7 @@ export class SidebarChannels {
             
             card.innerHTML = `
                 <div class="channel-logo">
-                    <img src="${channel.logo}" alt="${channel.name}" onerror="this.onerror=null; this.src='/assets/default-news.jpg';" loading="lazy">
+                    <img src="${channel.logo}" alt="${channel.name}" loading="lazy">
                 </div>
                 <div class="channel-info">
                     <div class="channel-name">${channel.name}</div>
@@ -161,6 +161,13 @@ export class SidebarChannels {
                     <i class="fas fa-external-link-alt"></i>
                 </a>
             `;
+
+            const channelImg = card.querySelector('.channel-logo img');
+            if (channelImg) {
+                channelImg.addEventListener('error', () => {
+                    channelImg.src = '/assets/default-news.jpg';
+                });
+            }
 
             card.addEventListener('click', (e) => {
                 if (!e.target.closest('.channel-link')) {

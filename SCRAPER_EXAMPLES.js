@@ -1,9 +1,4 @@
-/**
- * NEWS SCRAPER SERVICE - EXAMPLE USAGE
- * 
- * This file demonstrates how to use the News Scraper Service to extract
- * Open Graph metadata from news articles.
- */
+
 
 const newsScraperService = require('./services/newsScraperService');
 

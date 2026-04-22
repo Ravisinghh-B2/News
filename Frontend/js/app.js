@@ -9,6 +9,7 @@ import { StaticPage } from './pages/StaticPage.js';
 import { InterestsPage } from './pages/Interests.js';
 import { initContactForm } from './contact.js';
 
+
 let router;
 
 // ─── Initialize ──────────────────────────────────────────────────────

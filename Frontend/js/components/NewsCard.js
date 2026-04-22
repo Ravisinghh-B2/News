@@ -22,15 +22,18 @@ export function createNewsCard(article) {
   const categoryPlaceholder = placeholders[categoryStr] || placeholders['general'];
   const defaultImage = '/assets/placeholders/news.jpg';
 
-  const imageUrl = article.image || article.imageUrl || article.urlToImage || article.thumbnail || '';
+  const imageUrl = article.imageUrl || article.image || article.urlToImage || article.thumbnail || '';
   const finalImage = imageUrl || categoryPlaceholder;
+  // Log missing images in development
+  if (!imageUrl) console.debug('[NewsCard] No image for:', article.title?.substring(0, 40));
 
   const publishedTime = article.publishedAt ? timeAgo(article.publishedAt) : '';
   const user = getFrom('user');
 
   card.innerHTML = `
     <div class="img-wrapper">
-      <img src="${finalImage}" alt="${(article.title || '').substring(0, 80)}" loading="lazy">
+      <img src="${finalImage}" alt="${(article.title || '').substring(0, 80)}" loading="lazy"
+           onerror="this.onerror=null;this.src='${categoryPlaceholder}'">
       <div class="card-tags">
         <span class="news-category-tag">${article.category || 'News'}</span>
         ${article.subCategory ? `<span class="news-subcategory-tag">${article.subCategory}</span>` : ''}
@@ -66,13 +69,7 @@ export function createNewsCard(article) {
     </div>
   `;
 
-  // Image fallback
-  const imageEl = card.querySelector('.img-wrapper img');
-  if (imageEl) {
-    imageEl.addEventListener('error', () => {
-      imageEl.src = categoryPlaceholder;
-    });
-  }
+  // Image fallback handled by onerror in HTML template above
 
   // Save button handler
   if (user) {
@@ -122,14 +119,15 @@ export function createCompactCard(article) {
   const categoryPlaceholder = placeholders[categoryStr] || placeholders['general'];
   const defaultImage = '/assets/placeholders/news.jpg';
 
-  const imageUrl = article.image || article.imageUrl || article.urlToImage || article.thumbnail || '';
+  const imageUrl = article.imageUrl || article.image || article.urlToImage || article.thumbnail || '';
   const finalImage = imageUrl || categoryPlaceholder;
 
   const publishedTime = article.publishedAt ? timeAgo(article.publishedAt) : '';
 
   card.innerHTML = `
   <div class="compact-img">
-      <img src="${finalImage}" alt="${(article.title || '').substring(0, 80)}" loading="lazy">
+      <img src="${finalImage}" alt="${(article.title || '').substring(0, 80)}" loading="lazy"
+           onerror="this.onerror=null;this.src='${categoryPlaceholder}'">
     </div>
     <div class="compact-info">
       <h4 class="compact-title">
